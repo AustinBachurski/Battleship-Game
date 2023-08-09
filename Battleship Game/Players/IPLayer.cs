@@ -1,10 +1,11 @@
-﻿using Battleship_Game.Items;
+﻿using Battleship_Game.Objects;
 
 namespace Battleship_Game.Players
 {
     public interface IPlayer
     {
-        public void PlaceShip(Ship ship, char[] grid);
+        public bool isHuman { get; }
+        public void PlaceShip(Ship ship, PlayerData data);
         public int GetTarget();
         bool SatisfiedWithPlacement(char[] grid);
     }

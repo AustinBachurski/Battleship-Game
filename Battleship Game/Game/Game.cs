@@ -1,6 +1,7 @@
 ﻿using Battleship_Game.IO;
-using Battleship_Game.Items;
+using Battleship_Game.Objects;
 using Battleship_Game.Players;
+using System.Numerics;
 
 namespace Battleship_Game.Game
 {
@@ -9,13 +10,10 @@ namespace Battleship_Game.Game
         IPlayer _playerOne;
         IPlayer _playerTwo;
 
-        private char[] _playerOneShipGrid = new char[100];
-        private char[] _playerOneDisplay = new char[100];
+        PlayerData _playerOneData;
+        PlayerData _playerTwoData;
 
-        private char[] _playerTwoShipGrid = new char[100];
-        private char[] _playerTwoDisplay = new char[100];
-
-        private readonly Ship[] ships = {
+        private readonly Ship[] _ships = {
                                         new Ship(ShipType.AircraftCarrier, 5),
                                         new Ship(ShipType.Battleship, 4),
                                         new Ship(ShipType.Cruiser, 3),
@@ -26,50 +24,123 @@ namespace Battleship_Game.Game
         {
             _playerOne = playerOne;
             _playerTwo = playerTwo;
-
-            ClearGrids();
+            _playerOneData = new PlayerData(playerOne.isHuman);
+            _playerTwoData = new PlayerData(playerTwo.isHuman);
         }
 
         public void Play()
         {
+            SetPlayerNames();
             PlaceShips();
 
             while (true)
             {
+                Display.ResultsOf(PlayerOneTurn());
+                if (_playerTwoData.isDead)
+                {
+                    Display.GameOver(_playerOneData.name, _playerTwoData.name);
+                    GetInput.Exit();
+                    break;
+                }
+                GetInput.AnyKey();
 
+                Display.ResultsOf(PlayerTwoTurn());
+                if (_playerOneData.isDead)
+                {
+                    Display.GameOver(_playerTwoData.name, _playerOneData.name);
+                    GetInput.Exit();
+                    break;
+                }
+                GetInput.AnyKey();
             }
         }
-        
+
+        private ShotResult PlayerOneTurn()
+        {
+            int target = -1;
+
+            do
+            {
+                Console.Clear();
+                Display.Grid(_playerOneData.shotHistory);
+                Display.PlayerData(_playerTwoData);
+                Display.YourTurn(_playerOneData.name);
+
+                target = _playerOne.GetTarget();
+
+            } while (!_playerOneData.IsValidTarget(target));
+
+            Display.ShotFired(_playerOneData.name, target);
+            ShotResult result = _playerTwoData.GetShotResult(target);
+            _playerOneData.SetHistory(result, target);
+
+            return result;
+        }
+
+        private ShotResult PlayerTwoTurn()
+        {
+            int target = -1;
+
+            do
+            {
+                Console.Clear();
+                Display.Grid(_playerTwoData.shotHistory);
+                Display.PlayerData(_playerOneData);
+                Display.YourTurn(_playerTwoData.name);
+
+                target = _playerTwo.GetTarget();
+
+            } while (!_playerTwoData.IsValidTarget(target));
+
+            Display.ShotFired(_playerTwoData.name, target);
+            ShotResult result = _playerOneData.GetShotResult(target);
+            _playerTwoData.SetHistory(result, target);
+
+            return result;
+        }
+
+        private void SetPlayerNames()
+        {
+            _playerOneData.name = GetInput.PlayerName(1);
+            _playerTwoData.name = GetInput.PlayerName(2);
+        }
+
         private void PlaceShips()
         {
-            do // Player One.
+            do
             {
-                Array.Fill(_playerOneShipGrid, ' ');
+                _playerOneData.ResetShipPlacement();
 
-                foreach (Ship ship in ships)
+                foreach (Ship ship in _ships)
                 {
-                    Display.Grid(_playerOneShipGrid);
-                    _playerOne.PlaceShip(ship, _playerOneShipGrid);
+                        Display.Grid(_playerOneData.shipGrid);
+                        _playerOne.PlaceShip(ship, _playerOneData);
+
                 }
+            } while (!_playerOne.SatisfiedWithPlacement(_playerOneData.shipGrid));
 
-            } while (!_playerOne.SatisfiedWithPlacement(_playerOneShipGrid));
-
-            do // Player Two.
+            do
             {
-                Array.Fill(_playerTwoShipGrid, ' ');
+                _playerTwoData.ResetShipPlacement();
 
-                foreach (Ship ship in ships)
+                foreach (Ship ship in _ships)
                 {
-                    _playerTwo.PlaceShip(ship, _playerTwoShipGrid);
-                }
+                    Display.Grid(_playerTwoData.shipGrid);
+                    _playerTwo.PlaceShip(ship, _playerTwoData);
 
-            } while (!_playerTwo.SatisfiedWithPlacement(_playerTwoShipGrid));
+                }
+            } while (!_playerTwo.SatisfiedWithPlacement(_playerTwoData.shipGrid));
         }
 
-        private void ClearGrids(Player player = Player.Both)
-        {
-                Array.Fill(_playerOneDisplay, ' ');
-                Array.Fill(_playerTwoDisplay, ' ');
-        }
+
+
+
+
+
+
+
+
+
+
     }
 }

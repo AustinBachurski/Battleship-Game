@@ -1,25 +1,26 @@
 ﻿using Battleship_Game.Game;
 using Battleship_Game.IO;
-using Battleship_Game.Items;
+using Battleship_Game.Objects;
 
 namespace Battleship_Game.Players
 {
     public class HumanPlayer : IPlayer
     {
+        public bool isHuman { get { return true; } }
         public int GetTarget()
         {
             string? coordinates = null;
 
             while (true)
             {
-                Console.Write("\tEnter target coordinates (ex: A5): ");
+                Display.EnterCoordinates();
                 coordinates = Console.ReadLine().ToUpper();
 
                 if (!string.IsNullOrEmpty(coordinates) && IsValidCoordinate(coordinates))
                 {
-                    return ConvertCoordinatesToIndex(coordinates);
+                    return Change.ToIndex(coordinates);
                 }
-                Console.WriteLine($"\n\t'{coordinates}' is not a valid option, please try again.");
+                Display.InvalidCoordinates(coordinates);
             }
         }
 
@@ -27,7 +28,7 @@ namespace Battleship_Game.Players
         {
             while (true)
             {
-                Console.Write("\tEnter the orientation you want to place the ship - (V)ertical or (H)orizontal: ");
+                Display.SelectOrientation();
                 char key = char.ToUpper(Console.ReadKey().KeyChar);
                 Console.WriteLine();
 
@@ -39,16 +40,8 @@ namespace Battleship_Game.Players
                 {
                     return Orientation.Horizontal;
                 }
-                Console.WriteLine($"\n\t'{key}' is not a valid option, please try again.");
+                Display.InvalidKey(key);
             }
-        }
-
-        private int ConvertCoordinatesToIndex(string coordinates)
-        {
-            int yIndex = (int.Parse(coordinates.Substring(1)) - 1) * 10;
-            int xIndex = (int)coordinates[0] - 65;
-
-            return xIndex + yIndex;
         }
 
         private bool IsValidCoordinate(string target)
@@ -75,24 +68,24 @@ namespace Battleship_Game.Players
             }
         }
 
-        public void PlaceShip(Ship ship, char[] grid)
+        public void PlaceShip(Ship ship, PlayerData data)
         {
             bool shipPlaced = false;
 
             while (!shipPlaced)
             {
                 Console.Clear();
-                Display.Grid(grid);
-                Console.WriteLine($"\tPlace your {ship.type} on the grid!  {ship.type}s are {ship.size} squares in length.");
+                Display.Grid(data.shipGrid);
+                Display.PlaceInstructions(ship, data);
 
                 ship.coordinates = GetTarget();
                 ship.orientation = GetOrientation();
 
-                shipPlaced = GameLogic.TryToPlace(ship, grid);
+                shipPlaced = GameLogic.TryToPlace(ship, data.shipGrid, isHuman);
                 
                 if(!shipPlaced)
                 {
-                    Input.WaitForKeyPress();
+                    GetInput.AnyKey();
                 }
             }
         }
@@ -101,7 +94,7 @@ namespace Battleship_Game.Players
         {
             Console.Clear();
             Display.Grid(grid);
-            Console.WriteLine("\tAre you satisfied with your layout? (Y)es or (N)o: ");
+            Display.SatisfiedWithLayout();
             char key;
 
             while (true)
@@ -117,7 +110,7 @@ namespace Battleship_Game.Players
                 {
                     return false;
                 }
-                Console.WriteLine($"\t'{key}' is not valid, I need a Y or an N please.");
+                Display.InvalidKey(key);
             }
         }
     }

@@ -1,11 +1,11 @@
 ﻿using Battleship_Game.IO;
-using Battleship_Game.Items;
+using Battleship_Game.Objects;
 
 namespace Battleship_Game.Game
 {
-    internal static class GameLogic
+    public static class GameLogic
     {
-        internal static bool TryToPlace(Ship ship, char[] grid, bool humanPlayer = true)
+        public static bool TryToPlace(Ship ship, char[] grid, bool humanPlayer)
         {
             int[] gridSquares = PlacementPoints(ship);
 

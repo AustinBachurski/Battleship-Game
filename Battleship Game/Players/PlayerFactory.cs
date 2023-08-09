@@ -1,4 +1,6 @@
-﻿namespace Battleship_Game.Players
+﻿using Battleship_Game.IO;
+
+namespace Battleship_Game.Players
 {
     public static class PlayerFactory
     {

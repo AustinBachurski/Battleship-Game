@@ -1,31 +1,33 @@
-﻿using Battleship_Game.Items;
+﻿using Battleship_Game.Objects;
 using Battleship_Game.Game;
 
 namespace Battleship_Game.Players
 {
     public class ComputerPlayer : IPlayer
     {
-        private Random random;
+        public bool isHuman { get { return false; } }
+
+        private Random _random;
 
         public ComputerPlayer()
         {
-            random = new Random();
+            _random = new Random();
         }
 
         public int GetTarget()
         {
-            return random.Next(100);
+            return _random.Next(100);
         }
 
-        public void PlaceShip(Ship ship, char[] grid)
+        public void PlaceShip(Ship ship, PlayerData data)
         {
             bool shipPlaced = false;
 
             while (!shipPlaced)
             {
-                ship.coordinates = random.Next(100);
-                ship.orientation = random.Next(0, 2) == 0 ? Orientation.Horizontal : Orientation.Vertical;
-                shipPlaced = GameLogic.TryToPlace(ship, grid, false);
+                ship.coordinates = _random.Next(100);
+                ship.orientation = _random.Next(0, 2) == 0 ? Orientation.Horizontal : Orientation.Vertical;
+                shipPlaced = GameLogic.TryToPlace(ship, data.shipGrid, false);
             }
         }
 

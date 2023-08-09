@@ -1,27 +1,12 @@
-﻿namespace Battleship_Game.IO
+﻿using Battleship_Game.Objects;
+
+namespace Battleship_Game.IO
 {
     public static class Display
     {
         public static void WelcomeMessage()
         {
             Console.WriteLine("Welcome to Battleship!\n");
-        }
-
-        public static string GetPlayerName(int playerNumber)
-        {
-            string? name;
-
-            while (true)
-            {
-                Console.Write($"Enter the name of player {playerNumber}: ");
-                name = Console.ReadLine();
-
-                if (!string.IsNullOrEmpty(name))
-                {
-                    return name;
-                }
-                Console.WriteLine("\nI can't address you as 'Commander Nothing' now can I?");
-            }
         }
 
         public static void Grid(char[] grid)
@@ -52,6 +37,82 @@
                 + $"\t10 ═╣ │  {grid[90]}  │  {grid[91]}  │  {grid[92]}  │  {grid[93]}  │  {grid[94]}  │  {grid[95]}  │  {grid[96]}  │  {grid[97]}  │  {grid[98]}  │  {grid[99]}  │ ║\n"
                 + "\t    ║─┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─║\n"
                 + "\t    ╚═══════════════════════════════════════════════════════════════╝\n");
+        }
+
+        public static void PlayerData(PlayerData data)
+        {
+            Console.WriteLine($"\t{data.name} has "
+                + $"{data.shipsRemaining} ships remaining with "
+                + $"{data.totalHitpoints} {(data.totalHitpoints > 1 ? "hits" : "hit")} left.");
+        }
+
+        public static void PlaceInstructions(Ship ship, PlayerData data)
+        {
+            Console.WriteLine($"\t{data.name}, place your {ship.type} on the grid!  "
+                + $"{ship.type}s are {ship.size} squares in length.");
+        }
+
+        public static void YourTurn(string name)
+        {
+            Console.WriteLine($"\t{name}'s turn.");
+        }
+
+        public static void InvalidCoordinates(string coordinates)
+        {
+            Console.WriteLine($"\n\t'{coordinates}' is not a valid option, please try again.");
+        }
+
+        public static void InvalidCoordinates(int index)
+        {
+            Console.WriteLine($"\n\tYou already fired a shot at '{Change.ToCoordinates(index)}', choose a different target.");
+        }
+
+        public static void InvalidKey(char key)
+        {
+            Console.WriteLine($"\n\t'{key}' is not a valid option, please try again.");
+        }
+
+        public static void SatisfiedWithLayout()
+        {
+            Console.WriteLine("\tAre you satisfied with your layout? (Y)es or (N)o: ");
+        }
+
+        public static void SelectOrientation()
+        {
+            Console.Write("\tEnter the orientation you want to place the ship - (V)ertical or (H)orizontal: ");
+        }
+
+        public static void EnterCoordinates()
+        {
+            Console.Write("\tEnter target coordinates (ex: A5): ");
+        }
+
+        public static void ResultsOf(ShotResult result)
+        {
+            switch(result)
+            {
+                case ShotResult.Missed:
+                    Console.WriteLine("\tSplash!  The shot missed...");
+                    break;
+
+                case ShotResult.Hit:
+                    Console.WriteLine("\tBoom!  They hit something!");
+                    break;
+
+                case ShotResult.Sunk:
+                    Console.WriteLine("\tBoom! Gurgle! The ship is sunk!");
+                    break;
+            }
+        }
+
+        public static void ShotFired(string name, int target)
+        {
+            Console.WriteLine($"\t{name} fires a shot at {Change.ToCoordinates(target)}!");
+        }
+
+        public static void GameOver(string winner, string loser)
+        {
+            Console.WriteLine($"\n\t{winner} has won the battle by sinking all of {loser}'s ships!");
         }
     }
 }
