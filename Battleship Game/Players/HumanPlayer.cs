@@ -81,7 +81,7 @@ namespace Battleship_Game.Players
                 ship.coordinates = GetTarget();
                 ship.orientation = GetOrientation();
 
-                shipPlaced = GameLogic.TryToPlace(ship, data.shipGrid, isHuman);
+                shipPlaced = ShipPlacement.TryToPlace(ship, data.shipGrid, isHuman);
                 
                 if(!shipPlaced)
                 {

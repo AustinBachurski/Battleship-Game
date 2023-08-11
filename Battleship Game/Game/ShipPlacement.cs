@@ -3,7 +3,7 @@ using Battleship_Game.Objects;
 
 namespace Battleship_Game.Game
 {
-    public static class GameLogic
+    public static class ShipPlacement
     {
         public static bool TryToPlace(Ship ship, char[] grid, bool humanPlayer)
         {

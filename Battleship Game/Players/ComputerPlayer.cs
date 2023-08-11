@@ -27,7 +27,7 @@ namespace Battleship_Game.Players
             {
                 ship.coordinates = _random.Next(100);
                 ship.orientation = _random.Next(0, 2) == 0 ? Orientation.Horizontal : Orientation.Vertical;
-                shipPlaced = GameLogic.TryToPlace(ship, data.shipGrid, false);
+                shipPlaced = ShipPlacement.TryToPlace(ship, data.shipGrid, false);
             }
         }
 

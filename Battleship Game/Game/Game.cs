@@ -14,11 +14,11 @@ namespace Battleship_Game.Game
         PlayerData _playerTwoData;
 
         private readonly Ship[] _ships = {
-                                        new Ship(ShipType.AircraftCarrier, 5),
-                                        new Ship(ShipType.Battleship, 4),
-                                        new Ship(ShipType.Cruiser, 3),
-                                        new Ship(ShipType.Submarine, 3),
-                                        new Ship(ShipType.Destroyer, 2) };
+                                        new Ship(ShipType.AircraftCarrier),
+                                        new Ship(ShipType.Battleship),
+                                        new Ship(ShipType.Cruiser),
+                                        new Ship(ShipType.Submarine),
+                                        new Ship(ShipType.Destroyer) };
 
         public Game(IPlayer playerOne, IPlayer playerTwo)
         {

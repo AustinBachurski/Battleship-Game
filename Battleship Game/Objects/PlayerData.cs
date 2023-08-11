@@ -5,10 +5,10 @@ namespace Battleship_Game.Objects
 {
     public struct Ship
     {
-        public Ship(ShipType shipType, int shipSize, int shipCoordinates = -1, Orientation shipOrientation = Orientation.Void)
+        public Ship(ShipType shipType, int shipCoordinates = -1, Orientation shipOrientation = Orientation.Void)
         {
             type = shipType;
-            size = shipSize;
+            size = SetSize();
             coordinates = shipCoordinates;
             orientation = shipOrientation;
         }
@@ -42,6 +42,30 @@ namespace Battleship_Game.Objects
                     default:
                         throw new InvalidDataException("Ship.type was invalid!");
                 }
+            }
+        }
+
+        private int SetSize()
+        {
+            switch(type)
+            {
+                case ShipType.AircraftCarrier:
+                    return 5;
+
+                case ShipType.Battleship:
+                    return 4;
+
+                case ShipType.Cruiser:
+                    return 3;
+
+                case ShipType.Submarine:
+                    return 3;
+
+                case ShipType.Destroyer:
+                    return 2;
+
+                default:
+                    throw new InvalidDataException("Ship.type was invalid!");
             }
         }
     }
