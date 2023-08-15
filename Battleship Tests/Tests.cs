@@ -45,5 +45,39 @@ namespace Battleship_Tests
             Assert.AreEqual(expectedResult, result);
             Assert.AreEqual(expectedGrid, sinkTest.data.shotHistory);
         }
+
+        [TestCase("A1", 0)]
+        [TestCase("B2", 11)]
+        [TestCase("C3", 22)]
+        [TestCase("D4", 33)]
+        [TestCase("E5", 44)]
+        [TestCase("F6", 55)]
+        [TestCase("G7", 66)]
+        [TestCase("H8", 77)]
+        [TestCase("I9", 88)]
+        [TestCase("J10", 99)]
+        public void CoordinateToIndexConversion(string coordinate, int expected)
+        {
+            int result = Change.ToIndex(coordinate);
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestCase(0, "A1")]
+        [TestCase(11, "B2")]
+        [TestCase(22, "C3")]
+        [TestCase(33, "D4")]
+        [TestCase(44, "E5")]
+        [TestCase(55, "F6")]
+        [TestCase(66, "G7")]
+        [TestCase(77, "H8")]
+        [TestCase(88, "I9")]
+        [TestCase(99, "J10")]
+        public void IndexToCoordinateConversion(int index, string expected)
+        {
+            string result = Change.ToCoordinates(index);
+
+            Assert.AreEqual(expected, result);
+        }
     }
 }
