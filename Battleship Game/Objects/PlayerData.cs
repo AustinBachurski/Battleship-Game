@@ -1,75 +1,7 @@
 ﻿using Battleship_Game.IO;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Battleship_Game.Objects
 {
-    public struct Ship
-    {
-        public Ship(ShipType shipType, int shipCoordinates = -1, Orientation shipOrientation = Orientation.Void)
-        {
-            type = shipType;
-            size = SetSize();
-            coordinates = shipCoordinates;
-            orientation = shipOrientation;
-        }
-
-        public ShipType type;
-        public int size;
-        public int coordinates;
-        public Orientation orientation;
-
-        public char ToChar
-        {
-            get
-            {
-                switch (type)
-                {
-                    case ShipType.AircraftCarrier:
-                        return 'A';
-
-                    case ShipType.Battleship:
-                        return 'B';
-
-                    case ShipType.Cruiser:
-                        return 'C';
-
-                    case ShipType.Submarine:
-                        return 'S';
-
-                    case ShipType.Destroyer:
-                        return 'D';
-
-                    default:
-                        throw new InvalidDataException("Ship.type was invalid!");
-                }
-            }
-        }
-
-        private int SetSize()
-        {
-            switch(type)
-            {
-                case ShipType.AircraftCarrier:
-                    return 5;
-
-                case ShipType.Battleship:
-                    return 4;
-
-                case ShipType.Cruiser:
-                    return 3;
-
-                case ShipType.Submarine:
-                    return 3;
-
-                case ShipType.Destroyer:
-                    return 2;
-
-                default:
-                    throw new InvalidDataException("Ship.type was invalid!");
-            }
-        }
-    }
-
     public class PlayerData
     {
         public string name;
@@ -119,23 +51,6 @@ namespace Battleship_Game.Objects
             hitpoints[(int)ShipType.Destroyer] = 2;
         }
 
-        public bool IsValidTarget(int target)
-        {
-            if (shotHistory[target] == ' ')
-            {
-                return true;
-            }
-            else
-            {
-                if (isHuman)
-                {
-                    Display.InvalidCoordinates(target);
-                    GetInput.AnyKey();
-                }
-                return false;
-            }
-        }
-
         public ShotResult GetShotResult(int target)
         {
             switch (shipGrid[target])
@@ -163,6 +78,28 @@ namespace Battleship_Game.Objects
             }
         }
 
+        public bool IsValidTarget(int target)
+        {
+            if (shotHistory[target] == ' ')
+            {
+                return true;
+            }
+            else
+            {
+                if (isHuman)
+                {
+                    Display.InvalidCoordinatesWarning(target);
+                    GetInput.AnyKey();
+                }
+                return false;
+            }
+        }
+
+        public void ResetShipPlacement()
+        {
+            Array.Fill(shipGrid, ' ');
+        }
+
         public void SetHistory(ShotResult result, int target)
         {
             if (result == ShotResult.Missed)
@@ -173,11 +110,6 @@ namespace Battleship_Game.Objects
             {
                 shotHistory[target] = '☼';
             }
-        }
-
-        public void ResetShipPlacement()
-        {
-            Array.Fill(shipGrid, ' ');
         }
     }
 }

@@ -5,9 +5,9 @@ namespace Battleship_Game.Players
 {
     public class ComputerPlayer : IPlayer
     {
-        public bool isHuman { get { return false; } }
-
         private Random _random;
+
+        public bool isHuman { get { return false; } }
 
         public ComputerPlayer()
         {

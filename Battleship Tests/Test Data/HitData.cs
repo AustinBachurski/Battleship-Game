@@ -1,5 +1,4 @@
-﻿using Battleship_Game.IO;
-using Battleship_Game.Objects;
+﻿using Battleship_Game.Objects;
 using NUnit.Framework;
 
 namespace Battleship_Tests.Test_Data
@@ -41,6 +40,7 @@ namespace Battleship_Tests.Test_Data
                 ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
                 ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
                 ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', });
+
         private static SuccessfulCase submarine = new SuccessfulCase("B10", new char[] {
                 ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
                 ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
@@ -69,11 +69,25 @@ namespace Battleship_Tests.Test_Data
         {
             get
             {
-                yield return new TestCaseData(new PlayerData(false), carrier.coordinate, ShotResult.Hit, carrier.grid); // Carrier Hit.
-                yield return new TestCaseData(new PlayerData(false), battleship.coordinate, ShotResult.Hit, battleship.grid); // Battleship Hit.
-                yield return new TestCaseData(new PlayerData(false), cruiser.coordinate, ShotResult.Hit, cruiser.grid); // Cruiser Hit.
-                yield return new TestCaseData(new PlayerData(false), submarine.coordinate, ShotResult.Hit, submarine.grid); // Submarine Hit.
-                yield return new TestCaseData(new PlayerData(false), destroyer.coordinate, ShotResult.Hit, destroyer.grid); // Destroyer Hit.
+                // Carrier Hit.
+                yield return new TestCaseData(
+                    new PlayerData(false), carrier.coordinate, ShotResult.Hit, carrier.grid);
+
+                // Battleship Hit.
+                yield return new TestCaseData(
+                    new PlayerData(false), battleship.coordinate, ShotResult.Hit, battleship.grid);
+
+                // Cruiser Hit.
+                yield return new TestCaseData(
+                    new PlayerData(false), cruiser.coordinate, ShotResult.Hit, cruiser.grid);
+
+                // Submarine Hit.
+                yield return new TestCaseData(
+                    new PlayerData(false), submarine.coordinate, ShotResult.Hit, submarine.grid);
+
+                // Destroyer Hit.
+                yield return new TestCaseData(
+                    new PlayerData(false), destroyer.coordinate, ShotResult.Hit, destroyer.grid);
             }
         }
     }

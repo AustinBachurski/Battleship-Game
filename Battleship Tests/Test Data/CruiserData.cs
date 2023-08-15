@@ -6,7 +6,7 @@ namespace Battleship_Tests.Test_Data
 {
     internal static class CruiserData
     {
-        private static SuccessfulCase h = new SuccessfulCase("F4", new char[] {
+        private static SuccessfulCase horizontalCase = new SuccessfulCase("F4", new char[] {
                 'A', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ',
                 'A', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ',
                 'A', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ',
@@ -18,7 +18,7 @@ namespace Battleship_Tests.Test_Data
                 ' ', 'S', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
                 ' ', 'S', ' ', ' ', ' ', ' ', ' ', ' ', 'D', 'D', });
 
-        private static SuccessfulCase v = new SuccessfulCase("A8", new char[] {
+        private static SuccessfulCase verticalCase = new SuccessfulCase("A8", new char[] {
                 'A', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ',
                 'A', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ',
                 'A', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ',
@@ -34,12 +34,31 @@ namespace Battleship_Tests.Test_Data
         {
             get
             {
-                yield return new TestCaseData(new Ship(ShipType.Cruiser, Change.ToIndex("A1"), Orientation.Horizontal), false, TestItem.Grid()); // FAIL: Overlap.
-                yield return new TestCaseData(new Ship(ShipType.Cruiser, Change.ToIndex("I4"), Orientation.Horizontal), false, TestItem.Grid()); // FAIL: Out of bounds.
-                yield return new TestCaseData(new Ship(ShipType.Cruiser, Change.ToIndex(h.coordinate), Orientation.Horizontal), true, h.grid);  // SUCCESS.
-                yield return new TestCaseData(new Ship(ShipType.Cruiser, Change.ToIndex("B6"), Orientation.Vertical), false, TestItem.Grid()); // FAIL: Overlap.
-                yield return new TestCaseData(new Ship(ShipType.Cruiser, Change.ToIndex("A9"), Orientation.Vertical), false, TestItem.Grid()); // FAIL: Out of bounds.
-                yield return new TestCaseData(new Ship(ShipType.Cruiser, Change.ToIndex(v.coordinate), Orientation.Vertical), true, v.grid);  // SUCCESS.
+                // FAIL: Overlap.
+                yield return new TestCaseData(new Ship(ShipType.Cruiser,
+                    Change.ToIndex("A1"), Orientation.Horizontal), false, TestItem.Grid());
+
+                // FAIL: Out of bounds.
+                yield return new TestCaseData(new Ship(ShipType.Cruiser,
+                    Change.ToIndex("I4"), Orientation.Horizontal), false, TestItem.Grid());
+
+                // FAIL: Overlap.
+                yield return new TestCaseData(new Ship(ShipType.Cruiser,
+                    Change.ToIndex("B6"), Orientation.Vertical), false, TestItem.Grid());
+
+                // FAIL: Out of bounds.
+                yield return new TestCaseData(new Ship(ShipType.Cruiser,
+                    Change.ToIndex("A9"), Orientation.Vertical), false, TestItem.Grid());
+
+                // SUCCESS.
+                yield return new TestCaseData(new Ship(ShipType.Cruiser,
+                    Change.ToIndex(horizontalCase.coordinate), Orientation.Horizontal),
+                    true, horizontalCase.grid);
+
+                // SUCCESS.
+                yield return new TestCaseData(new Ship(ShipType.Cruiser,
+                    Change.ToIndex(verticalCase.coordinate), Orientation.Vertical),
+                    true, verticalCase.grid);
             }
         }
     }

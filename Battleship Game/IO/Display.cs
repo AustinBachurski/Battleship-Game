@@ -4,9 +4,14 @@ namespace Battleship_Game.IO
 {
     public static class Display
     {
-        public static void WelcomeMessage()
+        public static void EnterCoordinates()
         {
-            Console.WriteLine("Welcome to Battleship!\n");
+            Console.Write("\tEnter target coordinates (ex: A5): ");
+        }
+
+        public static void GameOver(string winner, string loser)
+        {
+            Console.WriteLine($"\n\t{winner} has won the battle by sinking all of {loser}'s ships!");
         }
 
         public static void Grid(char[] grid)
@@ -39,32 +44,14 @@ namespace Battleship_Game.IO
                 + "\t    ╚═══════════════════════════════════════════════════════════════╝\n");
         }
 
-        public static void PlayerData(PlayerData data)
-        {
-            Console.WriteLine($"\t{data.name} has "
-                + $"{data.shipsRemaining} ships remaining with "
-                + $"{data.totalHitpoints} {(data.totalHitpoints > 1 ? "hits" : "hit")} left.");
-        }
-
-        public static void PlaceInstructions(Ship ship, PlayerData data)
-        {
-            Console.WriteLine($"\t{data.name}, place your {ship.type} on the grid!  "
-                + $"{ship.type}s are {ship.size} squares in length.");
-        }
-
-        public static void YourTurn(string name)
-        {
-            Console.WriteLine($"\t{name}'s turn.");
-        }
-
-        public static void InvalidCoordinates(string coordinates)
-        {
-            Console.WriteLine($"\n\t'{coordinates}' is not a valid option, please try again.");
-        }
-
-        public static void InvalidCoordinates(int index)
+        public static void InvalidCoordinatesWarning(int index)
         {
             Console.WriteLine($"\n\tYou already fired a shot at '{Change.ToCoordinates(index)}', choose a different target.");
+        }
+
+        public static void InvalidCoordinatesWarning(string coordinates)
+        {
+            Console.WriteLine($"\n\t'{coordinates}' is not a valid option, please try again.");
         }
 
         public static void InvalidKey(char key)
@@ -72,24 +59,54 @@ namespace Battleship_Game.IO
             Console.WriteLine($"\n\t'{key}' is not a valid option, please try again.");
         }
 
-        public static void SatisfiedWithLayout()
+        public static void OutOfBoundsWarning()
         {
-            Console.WriteLine("\tAre you satisfied with your layout? (Y)es or (N)o: ");
+            Console.WriteLine("\n\tShips must be placed within the bounds of the exercise, try again.");
         }
 
-        public static void SelectOrientation()
+        public static void OverlapWarning()
         {
-            Console.Write("\tEnter the orientation you want to place the ship - (V)ertical or (H)orizontal: ");
+            Console.WriteLine("\nShips cannot overlap one another, please try again.");
         }
 
-        public static void EnterCoordinates()
+        public static void PlaceInstructions(Ship ship, PlayerData data)
         {
-            Console.Write("\tEnter target coordinates (ex: A5): ");
+            Console.WriteLine($"\t{data.name}, place your {ship.type} on the grid!  {ship.type}s are {ship.size} squares in length.");
+        }
+        public static void PlacementInformation()
+        {
+            char[] example = {
+                'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                ' ', ' ', ' ', 'B', 'B', 'B', 'B', ' ', ' ', ' ',
+                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', };
+
+            Grid(example);
+
+            Console.WriteLine("\tShip placement is done by selecting a grid square, and then an orientation.");
+            Console.WriteLine("\tShips are placed top to bottom or left to right from the selected grid square.");
+            Console.WriteLine("\n\tIn the example above:");
+            Console.WriteLine("\t\tThe Aircraft Carrier was placed at \"A1\" with \"Vertical\" orientation,");
+            Console.WriteLine("\t\tand the Battleship was placed at \"D6\" with \"Horizontal\" orientation.");
+            GetInput.AnyKey();
+        }
+
+        public static void PlayerData(PlayerData data)
+        {
+            Console.WriteLine($"\t{data.name} has "
+                + $"{data.shipsRemaining} ships remaining with "
+                + $"{data.totalHitpoints} {(data.totalHitpoints > 1 ? "hits" : "hit")} left.");
         }
 
         public static void ResultsOf(ShotResult result)
         {
-            switch(result)
+            switch (result)
             {
                 case ShotResult.Missed:
                     Console.WriteLine("\tSplash!  The shot missed...");
@@ -105,14 +122,34 @@ namespace Battleship_Game.IO
             }
         }
 
+        public static void SatisfiedWithLayout()
+        {
+            Console.WriteLine("\tAre you satisfied with your layout? (Y)es or (N)o: ");
+        }
+
+        public static void SelectOrientation()
+        {
+            Console.Write("\tEnter the orientation you want to place the ship - (V)ertical or (H)orizontal: ");
+        }
+
+        public static void SelectPlayerType(int playerNumber)
+        {
+            Console.Write($"Is player {playerNumber} a (H)uman or a (C)omputer? ");
+        }
+
         public static void ShotFired(string name, int target)
         {
             Console.WriteLine($"\t{name} fires a shot at {Change.ToCoordinates(target)}!");
         }
 
-        public static void GameOver(string winner, string loser)
+        public static void WelcomeMessage()
         {
-            Console.WriteLine($"\n\t{winner} has won the battle by sinking all of {loser}'s ships!");
+            Console.WriteLine("Welcome to Battleship!\n");
+        }
+
+        public static void YourTurn(string name)
+        {
+            Console.WriteLine($"\t{name}'s turn.");
         }
     }
 }

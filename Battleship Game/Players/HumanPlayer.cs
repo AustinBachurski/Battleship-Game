@@ -20,51 +20,7 @@ namespace Battleship_Game.Players
                 {
                     return Change.ToIndex(coordinates);
                 }
-                Display.InvalidCoordinates(coordinates);
-            }
-        }
-
-        private Orientation GetOrientation()
-        {
-            while (true)
-            {
-                Display.SelectOrientation();
-                char key = char.ToUpper(Console.ReadKey().KeyChar);
-                Console.WriteLine();
-
-                if (key == 'V')
-                {
-                    return Orientation.Vertical;
-                }
-                else if (key == 'H')
-                {
-                    return Orientation.Horizontal;
-                }
-                Display.InvalidKey(key);
-            }
-        }
-
-        private bool IsValidCoordinate(string target)
-        {
-            if (target[0] >= 'A' && target[0] <= 'J')
-            {
-                if (target.Length == 2)
-                {
-                    return target[1] <= '9' && target[1] >= '1';
-                }
-                else if (target.Length == 3)
-                {
-                    return target[1] == '1' && target[2] == '0';
-
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
+                Display.InvalidCoordinatesWarning(coordinates);
             }
         }
 
@@ -79,11 +35,11 @@ namespace Battleship_Game.Players
                 Display.PlaceInstructions(ship, data);
 
                 ship.coordinates = GetTarget();
-                ship.orientation = GetOrientation();
+                ship.orientation = GetInput.ShipOrientation();
 
                 shipPlaced = ShipPlacement.TryToPlace(ship, data.shipGrid, isHuman);
-                
-                if(!shipPlaced)
+
+                if (!shipPlaced)
                 {
                     GetInput.AnyKey();
                 }
@@ -111,6 +67,30 @@ namespace Battleship_Game.Players
                     return false;
                 }
                 Display.InvalidKey(key);
+            }
+        }
+
+        private bool IsValidCoordinate(string target)
+        {
+            if (target[0] >= 'A' && target[0] <= 'J')
+            {
+                if (target.Length == 2)
+                {
+                    return target[1] <= '9' && target[1] >= '1';
+                }
+                else if (target.Length == 3)
+                {
+                    return target[1] == '1' && target[2] == '0';
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
     }

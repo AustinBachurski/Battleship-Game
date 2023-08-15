@@ -9,20 +9,20 @@ namespace Battleship_Game.Game
         {
             int[] gridSquares = PlacementPoints(ship);
 
-            if (gridSquares.Any(x => x < 0 || x > 99))
+            if (InvalidPlacementPoint(gridSquares))
             {
                 if (humanPlayer)
                 {
-                    Console.WriteLine("\nShips must be placed within the pounds of the exercise, try again.\n");
+                    Display.OutOfBoundsWarning();
                 }
                 return false;
             }
 
-            if (gridSquares.All(x => grid[x] == ' '))
+            if (SpacesAreEmpty(gridSquares, grid))
             {
                 foreach (int i in gridSquares)
                 {
-                    grid[i] = ship.ToChar;
+                    grid[i] = ship.ToChar; // Place ship on grid.
                 }
                 return true;
             }
@@ -30,42 +30,44 @@ namespace Battleship_Game.Game
             {
                 if (humanPlayer)
                 {
-                    Console.WriteLine("\nShips cannot overlap one another, please try again.\n");
+                    Display.OverlapWarning();
                 }
                 return false;
             }
         }
 
+        private static bool FallsWithinHorizontalBounds(Ship ship)
+        {
+            return (ship.coordinates % 10) + ship.size <= 10;
+        }
+
+        private static bool FallsWithinVerticalBounds(Ship ship)
+        {
+            return (ship.coordinates / 10) + ship.size <= 10;
+        }
+
+        private static bool InvalidPlacementPoint(int[] gridSquares)
+        {
+            return gridSquares.Any(x => x == -1);
+        }
+
         private static int[] PlacementPoints(Ship ship)
         {
             int[] gridSquares = new int[ship.size];
-            Array.Fill(gridSquares, -1);
-            int insert = 0;
+
+            Array.Fill(gridSquares, -1); // Fill with invalid value, if value is unchanged
+                                         // when returned, placement request is invalid.
+
+            int insertionIndex = 0;
 
             if (ship.orientation == Orientation.Horizontal)
             {
-                if ((ship.coordinates % 10) + ship.size <= 10)
+                if (FallsWithinHorizontalBounds(ship))
                 {
                     for (int i = ship.coordinates; i < ship.coordinates + ship.size; ++i)
                     {
-                        gridSquares[insert] = i;
-                        ++insert;
-                    }
-                    return gridSquares;
-                }
-                else
-                {
-                    return gridSquares;
-                }
-            }
-            else if (ship.orientation == Orientation.Vertical)
-            {
-                if ((ship.coordinates / 10) + ship.size <= 10)
-                {
-                    for (int i = ship.coordinates; i < ship.coordinates + (ship.size * 10); i += 10)
-                    {
-                        gridSquares[insert] = i;
-                        ++insert;
+                        gridSquares[insertionIndex] = i;
+                        ++insertionIndex;
                     }
                     return gridSquares;
                 }
@@ -76,9 +78,25 @@ namespace Battleship_Game.Game
             }
             else
             {
-                // TODO: Implement Diagonal
-                return gridSquares;
+                if (FallsWithinVerticalBounds(ship))
+                {
+                    for (int i = ship.coordinates; i < ship.coordinates + (ship.size * 10); i += 10)
+                    {
+                        gridSquares[insertionIndex] = i;
+                        ++insertionIndex;
+                    }
+                    return gridSquares;
+                }
+                else
+                {
+                    return gridSquares;
+                }
             }
+        }
+
+        private static bool SpacesAreEmpty(int[] gridSquares, char[] grid)
+        {
+            return gridSquares.All(x => grid[x] == ' ');
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Battleship_Game.Objects;
 
 namespace Battleship_Game.IO
 {
@@ -10,7 +6,13 @@ namespace Battleship_Game.IO
     {
         public static void AnyKey()
         {
-            Console.WriteLine("\t\nPress any key to continue...");
+            Console.WriteLine("\n\tPress any key to continue...");
+            Console.ReadKey();
+        }
+
+        public static void Exit()
+        {
+            Console.WriteLine("\n\tPress any key to exit...");
             Console.ReadKey();
         }
 
@@ -31,10 +33,24 @@ namespace Battleship_Game.IO
             }
         }
 
-        public static void Exit()
+        public static Orientation ShipOrientation()
         {
-            Console.WriteLine("\t\nPress any key to exit...");
-            Console.ReadKey();
+            while (true)
+            {
+                Display.SelectOrientation();
+                char key = char.ToUpper(Console.ReadKey().KeyChar);
+                Console.WriteLine();
+
+                if (key == 'V')
+                {
+                    return Orientation.Vertical;
+                }
+                else if (key == 'H')
+                {
+                    return Orientation.Horizontal;
+                }
+                Display.InvalidKey(key);
+            }
         }
     }
 }

@@ -26,8 +26,7 @@ namespace Battleship_Tests
 
         [TestCaseSource(typeof(HitData), nameof(HitData.Test))]
         [TestCaseSource(typeof(MissData), nameof(MissData.Test))]
-        // TODO: Sink Tests
-        public void ShotResults(PlayerData data, string target, ShotResult expectedResult, char[] expectedGrid)
+        public void HitAndMiss(PlayerData data, string target, ShotResult expectedResult, char[] expectedGrid)
         {
             data.shipGrid = TestItem.Grid();
             ShotResult result = data.GetShotResult(Change.ToIndex(target));
@@ -35,6 +34,16 @@ namespace Battleship_Tests
 
             Assert.AreEqual(expectedResult, result);
             Assert.AreEqual(expectedGrid, data.shotHistory);
+        }
+
+        [TestCaseSource(typeof(SunkData), nameof(SunkData.Test))]
+        public void Sunk(NearlySunk sinkTest, string target, ShotResult expectedResult, char[] expectedGrid)
+        {
+            ShotResult result = sinkTest.data.GetShotResult(Change.ToIndex(target));
+            sinkTest.data.SetHistory(result, Change.ToIndex(target));
+
+            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(expectedGrid, sinkTest.data.shotHistory);
         }
     }
 }

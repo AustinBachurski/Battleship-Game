@@ -10,7 +10,7 @@ namespace Battleship_Game.Players
 
             while (true)
             {
-                Console.Write($"Is player {playerNumber} a (H)uman or a (C)omputer? ");
+                Display.SelectPlayerType(playerNumber);
                 choice = char.ToUpper(Console.ReadKey().KeyChar);
                 Console.WriteLine();
 
@@ -22,8 +22,10 @@ namespace Battleship_Game.Players
                 {
                     return new ComputerPlayer();
                 }
-
-                Console.WriteLine($"\"{choice}\" is not a valid option, please try again.\n");
+                else
+                {
+                    Display.InvalidKey(choice);
+                }
             }
         }
     }

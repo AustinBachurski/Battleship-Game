@@ -1,7 +1,6 @@
 ﻿using Battleship_Game.IO;
 using Battleship_Game.Objects;
 using Battleship_Game.Players;
-using System.Numerics;
 
 namespace Battleship_Game.Game
 {
@@ -13,12 +12,13 @@ namespace Battleship_Game.Game
         PlayerData _playerOneData;
         PlayerData _playerTwoData;
 
+        // Array of ships to be placed onto the grid by each player.
         private readonly Ship[] _ships = {
-                                        new Ship(ShipType.AircraftCarrier),
-                                        new Ship(ShipType.Battleship),
-                                        new Ship(ShipType.Cruiser),
-                                        new Ship(ShipType.Submarine),
-                                        new Ship(ShipType.Destroyer) };
+            new Ship(ShipType.AircraftCarrier),
+            new Ship(ShipType.Battleship),
+            new Ship(ShipType.Cruiser),
+            new Ship(ShipType.Submarine),
+            new Ship(ShipType.Destroyer) };
 
         public Game(IPlayer playerOne, IPlayer playerTwo)
         {
@@ -28,9 +28,10 @@ namespace Battleship_Game.Game
             _playerTwoData = new PlayerData(playerTwo.isHuman);
         }
 
-        public void Play()
+        public void Play() // Gameloop.
         {
             SetPlayerNames();
+            Display.PlacementInformation();
             PlaceShips();
 
             while (true)
@@ -53,6 +54,33 @@ namespace Battleship_Game.Game
                 }
                 GetInput.AnyKey();
             }
+        }
+
+        private void PlaceShips()
+        {
+            do
+            {
+                _playerOneData.ResetShipPlacement();
+
+                foreach (Ship ship in _ships)
+                {
+                    Display.Grid(_playerOneData.shipGrid);
+                    _playerOne.PlaceShip(ship, _playerOneData);
+                }
+
+            } while (!_playerOne.SatisfiedWithPlacement(_playerOneData.shipGrid));
+
+            do
+            {
+                _playerTwoData.ResetShipPlacement();
+
+                foreach (Ship ship in _ships)
+                {
+                    Display.Grid(_playerTwoData.shipGrid);
+                    _playerTwo.PlaceShip(ship, _playerTwoData);
+                }
+
+            } while (!_playerTwo.SatisfiedWithPlacement(_playerTwoData.shipGrid));
         }
 
         private ShotResult PlayerOneTurn()
@@ -104,43 +132,5 @@ namespace Battleship_Game.Game
             _playerOneData.name = GetInput.PlayerName(1);
             _playerTwoData.name = GetInput.PlayerName(2);
         }
-
-        private void PlaceShips()
-        {
-            do
-            {
-                _playerOneData.ResetShipPlacement();
-
-                foreach (Ship ship in _ships)
-                {
-                        Display.Grid(_playerOneData.shipGrid);
-                        _playerOne.PlaceShip(ship, _playerOneData);
-
-                }
-            } while (!_playerOne.SatisfiedWithPlacement(_playerOneData.shipGrid));
-
-            do
-            {
-                _playerTwoData.ResetShipPlacement();
-
-                foreach (Ship ship in _ships)
-                {
-                    Display.Grid(_playerTwoData.shipGrid);
-                    _playerTwo.PlaceShip(ship, _playerTwoData);
-
-                }
-            } while (!_playerTwo.SatisfiedWithPlacement(_playerTwoData.shipGrid));
-        }
-
-
-
-
-
-
-
-
-
-
-
     }
 }

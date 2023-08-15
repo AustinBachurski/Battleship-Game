@@ -5,8 +5,8 @@ namespace Battleship_Game.Players
     public interface IPlayer
     {
         public bool isHuman { get; }
-        public void PlaceShip(Ship ship, PlayerData data);
         public int GetTarget();
+        public void PlaceShip(Ship ship, PlayerData data);
         bool SatisfiedWithPlacement(char[] grid);
     }
 }
