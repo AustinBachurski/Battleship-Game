@@ -25,7 +25,7 @@ Capstone Project for the [Skill Foundry](https://www.skillfoundry.io) "Object-Or
 
 ## The Game
 
-The game is a 1vs1, played in the console.  Two human players may play against one another, a human player may play against a computer (computer players take shots randomly), or two computers can play against one another if desired.  Each player enters their name, then places their ships on a 10x10 grid.  Players then take turns gussing the location of the other players ships with the goal of sinking them all.  When a player fires a shot at the selected grid location, the results of the shot are reported to the console - Hit, Miss, or Sunk.  The game ends a player sinks all of their enemy's ships.  The project includes a suite of unit tests to verify proper function.
+The game is 1vs1, played in the console.  Two human players may play against one another, a human player may play against a computer (computer players take shots randomly), or two computers can play against one another if desired.  Each player enters their name, then places their ships on a 10x10 grid.  Players then take turns guessing the location of the other players' ships with the goal of sinking them all.  When a player fires a shot at the selected grid location, the results of the shot are reported to the console - Hit, Miss, or Sunk.  The game ends when a player sinks all their enemy's ships.  The project includes a suite of unit tests to verify proper function.
 
 ## Image Gallery
 
